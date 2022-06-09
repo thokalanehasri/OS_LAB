@@ -1,0 +1,29 @@
+1 #include<stdlib.h>
+  2 #include<stdio.h>
+  3 #include<unistd.h>
+  4 #include<fcntl.h>
+  5 #include<pthread.h>
+  6 #include<sys/stat.h>
+  7 #include<sys/types.h>
+  8 #include<string.h>
+  9 
+ 10 int main(){
+ 11 int fd;
+ 12 char *fifo  = "/tmp/newpipe";
+ 13  mkfifo(fifo,0666);
+ 14 char arr1[80], arr2[80];
+ 15 while(1)
+ 16 {
+ 17 fd = open(fifo,O_WRONLY);
+ 18 fgets(arr2,80,stdin);
+ 19 write(fd,arr2,strlen(arr2)+1);
+ 20 fd=open(fifo,O_RDONLY);
+ 21 read(fd,arr1,sizeof(arr1));
+ 22 printf("user2:%s\n",arr1);
+ 23 close(fd);
+ 24 }
+ 25 return 0;
+ 26 }
+output:
+hi
+user2:hello
