@@ -1,0 +1,26 @@
+#include<stdio.h>
+  2 #include<sys/ipc.h>
+  3 #include<sys/msg.h>
+  4 #define MAX 10
+  5 
+  6 struct mesg_buffer{
+  7 long mesg_type;
+  8 char mesg_text[100];
+  9 }message;
+ 10 
+ 11 int main()
+ 12 {
+ 13 key_t key;
+ 14 int msgid;
+ 15 key=ftok("progfile",65);
+ 16 msgid = msgget(key,0666 |IPC_CREAT);
+ 17 message.mesg_type = 1;
+ 18 printf("write data:");
+ 19 fgets(message.mesg_text,MAX,stdin);
+ 20 msgsnd(msgid, &message,sizeof(message),0);
+ 21 printf("data send is: %s\n",message.mesg_text);
+ 22 return 0;
+ 23 }
+~   output:
+write data:hello
+data send is: hello
